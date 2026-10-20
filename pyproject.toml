@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-rag-lab"
+version = "0.1.0"
+description = "Repo nghiên cứu: tầng quyết định kiểu Jev (rerank + gate) cho RAG — 3 pipeline đối chứng + golden set tiếng Việt"
+readme = "README.md"
+requires-python = ">=3.11"
+# Môi trường sandbox hiện tại zero-install: chỉ stdlib + numpy + pyyaml.
+dependencies = [
+    "numpy",
+    "pyyaml",
+]
+
+# Extras tương lai (CHƯA cài, chỉ ghi chú hướng phát triển):
+# [project.optional-dependencies]
+# embeddings = ["sentence-transformers"]   # embedding model thật thay HashingEmbedder
+# faiss = ["faiss-cpu"]                    # vector store FAISS thay NumpyStore (theo spec, vòng 1)
+# dev = ["pytest"]                         # hiện tại test bằng unittest của stdlib
+
+[tool.setuptools]
+packages = ["src"]
