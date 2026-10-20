@@ -4,7 +4,7 @@
 
 **Ngày tạo**: 2026-10-20
 
-**Trạng thái**: Bản nháp — còn câu hỏi mở ở mục "Làm rõ" (đáng chú ý: Q2 về API key của Jev khi bắt đầu cài đặt).
+**Trạng thái**: Vòng 1 (offline) đã chạy xong ngày 2026-10-20 — harness + 3 pipeline chạy đầu-cuối bằng thành phần offline (HashingEmbedder, HeuristicScorer, MockLLM), Pipeline B chưa chạy vì thiếu key. Báo cáo vòng 1: `evals/reports/20261020-1505-vi.md` và `-en.md`; tổng kết + quét hiệu chuẩn ngưỡng: `docs/findings-round1.md`. Chưa kết luận GO/NO-GO; còn câu hỏi mở Q1 (chờ đường mạng) và Q2 (chờ API key) ở mục "Làm rõ".
 
 **Đầu vào**: 5 hình người dùng gửi ngày 2026-10-20, lưu tại `docs/source-images/`:
 (1) `01-rag-vs-jev-rag.jpg` — sơ đồ "RAG vs Jev + RAG"; (2) `02-top-5-rag-architectures.jpg` —
@@ -140,9 +140,9 @@ Ngưỡng khởi điểm (tham khảo cài đặt Passage Gate đã công bố �
 
 Còn chờ quyết:
 
-- **Q1**: Benchmark tiếng Anh vòng 1 dùng NFCorpus (ngắn, thiên truy xuất y sinh) hay tập con HotpotQA (câu hỏi đa bước, gần với ca rerank khó đã công bố)? → *Chờ trả lời.* Khuyến nghị: HotpotQA tập con 200 câu — đủ lớn để có ý nghĩa, đủ nhỏ để chạy rẻ.
-- **Q2**: Jev API cần tài khoản/API key của TypeSafe — khi bắt đầu cài đặt Pipeline B, người dùng cung cấp key qua Secure Vault hay đăng ký tài khoản mới? → *Chờ trả lời.* Pipeline A và C không bị chặn bởi câu hỏi này.
-- **Q3**: Golden set tiếng Việt 50 câu có đủ cho vòng 1 không, hay nâng lên 100 câu ngay từ đầu (tốn công gán nhãn gấp đôi)? → *Chờ trả lời.* Khuyến nghị: 50 câu vòng 1, mở rộng khi đã có harness chạy ổn.
+- **Q1**: Benchmark tiếng Anh vòng 1 dùng NFCorpus (ngắn, thiên truy xuất y sinh) hay tập con HotpotQA (câu hỏi đa bước, gần với ca rerank khó đã công bố)? → *Đã chốt hướng HotpotQA tập con 200 câu (theo khuyến nghị): script `evals/data/build_hotpotqa.py` đã viết sẵn (tải bản distractor, lấy mẫu seed 42), nhưng sandbox không có mạng nên CHƯA chạy được — chờ đường mạng.* Vòng 1 tạm dùng bộ mini EN 10 câu tự tạo.
+- **Q2**: Jev API cần tài khoản/API key của TypeSafe — khi bắt đầu cài đặt Pipeline B, người dùng cung cấp key qua Secure Vault hay đăng ký tài khoản mới? → *Vẫn chờ key.* Đây là blocker duy nhất của Pipeline B: JevScorer đã cài đặt sẵn, Pipeline B bị SKIPPED trong mọi lần chạy vòng 1 vì thiếu `JEV_API_KEY`.
+- **Q3**: Golden set tiếng Việt 50 câu có đủ cho vòng 1 không, hay nâng lên 100 câu ngay từ đầu (tốn công gán nhãn gấp đôi)? → **ĐÃ CHỐT (auto, theo khuyến nghị): 50 câu.** Golden set 50 câu đã xây xong (`evals/data/vi_golden.jsonl`: has_answer 20, no_answer 10, distractor_no_evidence 12, injection 8) và đã chạy vòng 1 + quét ngưỡng trên đó. Việc mở rộng lên 100 câu để dành cho vòng 2, khi cần tập hiệu chuẩn và tập validation độc lập.
 
 Đã tự quyết từ ngữ cảnh: FAISS local cho vòng 1 (tái lập rẻ, thay vector store là biến phụ không thuộc RQ nào); không dùng LangChain (giữ biến thí nghiệm ở tầng quyết định); ngưỡng khởi điểm lấy theo cài đặt Passage Gate đã công bố rồi quét quanh điểm đó.
 

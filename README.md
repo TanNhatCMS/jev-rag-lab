@@ -49,7 +49,8 @@ evals/          Golden set + script chạy eval, báo cáo kết quả
 ## Trạng thái
 
 - 2026-10-20: Khởi tạo repo + đặc tả nghiên cứu 001 (bản nháp, còn câu hỏi mở trong mục "Làm rõ" của spec).
-- Chưa có code thí nghiệm — bước tiếp theo là plan triển khai pipeline A (baseline) và bộ eval.
+- 2026-10-20: **Vòng 1 (offline) hoàn tất** — scaffold + 3 pipeline + eval harness đã chạy đầu-cuối, 52/52 test pass. Headline (chỉ là hành vi của thành phần offline — HashingEmbedder + HeuristicScorer + MockLLM, không phải model thật): C-heuristic abstain đúng nhóm distractor 75% và nhóm injection 75% (baseline: 58.3% / 25%) nhưng abstain sai tới 60% câu có đáp án; Pipeline B chưa chạy (thiếu `JEV_API_KEY`). **Chưa kết luận GO/NO-GO.** Tổng kết đầy đủ: [`docs/findings-round1.md`](docs/findings-round1.md); số liệu thô tại `evals/reports/` + `evals/results/` (gồm cả quét hiệu chuẩn ngưỡng `sweep-*`).
+- Bước tiếp theo (vòng 2) bị chặn bởi 3 đầu vào ngoài sandbox: `JEV_API_KEY`, một endpoint LLM + embedding thật, và đường mạng để lấy benchmark HotpotQA — chi tiết ở mục 6 của `docs/findings-round1.md`.
 
 ## Ghi chú
 
