@@ -1,1 +1,1 @@
-"""Client gọi LLM (generation + scorer model nhỏ). Để trống — cài đặt ở nhánh sau."""
+"""Client gọi LLM: Protocol LLM, MockLLM (offline) và HttpLLM (OpenAI-compatible)."""
