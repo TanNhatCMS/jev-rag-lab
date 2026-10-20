@@ -1,0 +1,37 @@
+# Cấu hình thí nghiệm jev-rag-lab (ER-003: mọi ngưỡng nằm ở đây, không hardcode).
+# Mỗi lần chạy eval, toàn bộ file này được nhúng vào báo cáo để tái lập kết quả.
+
+embedding:
+  provider: hashing        # hashing = HashingEmbedder local (mặc định, zero-install)
+                           # http = HttpEmbedder tới endpoint OpenAI-compatible (xem .env)
+  dim: 384
+
+chunking:
+  size: 800                # số ký tự tối đa mỗi chunk
+  overlap: 100             # số ký tự gối nhau giữa 2 chunk liên tiếp
+
+retrieval:
+  top_n: 20                # số ứng viên first-stage (ưu tiên recall)
+  top_k: 5                 # số đoạn tối đa đưa vào context sau gate
+  similarity_threshold: 0.35  # ngưỡng similarity của pipeline baseline (Pipeline A)
+
+gate:
+  # Ngưỡng khởi điểm theo cài đặt Passage Gate đã công bố — điểm bắt đầu để quét, chưa phải số chốt.
+  relevance: 0.45          # loại ứng viên khi relevance < ngưỡng này
+  evidence: 0.55           # yêu cầu evidence >= ngưỡng này mới qua cổng
+  injection: 0.70          # loại ứng viên khi injection > ngưỡng này
+  contradiction: 0.70      # contradiction > ngưỡng này: tách riêng ghi nhận, vòng 1 chưa đưa vào context
+
+pipelines:
+  A_baseline:
+    description: "RAG thường: vector search -> top_k theo similarity -> LLM"
+    gate: null
+  B_jev:
+    description: "Jev + RAG: top_n -> Jev API chấm 4 tín hiệu -> gate -> top_k / abstain"
+    scorer: jev
+    gate: gate
+  C_llm_small:
+    description: "Như B nhưng scorer là model nhỏ qua AI Gateway (đối chứng cho RQ3)"
+    scorer: llm_small
+    gate: gate
+  shadow_mode: false       # ER-005: true = scorer chấm và ghi điểm nhưng không lọc
