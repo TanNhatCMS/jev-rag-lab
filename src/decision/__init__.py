@@ -1,1 +1,1 @@
-"""Tầng quyết định (rerank + gate kiểu Jev). Để trống — cài đặt ở nhánh sau."""
+"""Tầng quyết định (rerank + gate kiểu Jev): scorer.py (interface + 3 implementation) và gate.py (ngưỡng + abstain)."""

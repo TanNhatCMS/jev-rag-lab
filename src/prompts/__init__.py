@@ -1,1 +1,1 @@
-"""Prompt templates. Để trống — cài đặt ở nhánh sau."""
+"""Prompt templates: generation (trả lời kèm trích dẫn / ABSTAIN) và scoring (chấm packed)."""
